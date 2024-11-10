@@ -1,34 +1,35 @@
 # Linux-Process-API-fork-wait-exec-
-Ex02-Linux Process API-fork(), wait(), exec()
+
 # Ex02-OS-Linux-Process API - fork(), wait(), exec()
+
 Operating systems Lab exercise
 
 
-# AIM:
+## AIM :
+
 To write C Program that uses Linux Process API - fork(), wait(), exec()
 
-# DESIGN STEPS:
+## DESIGN STEPS :
 
-### Step 1:
+### Step 1 :
 
 Navigate to any Linux environment installed on the system or installed inside a virtual environment like virtual box/vmware or online linux JSLinux (https://bellard.org/jslinux/vm.html?url=alpine-x86.cfg&mem=192) or docker.
 
-### Step 2:
+### Step 2 :
 
 Write the C Program using Linux Process API - fork(), wait(), exec()
 
-### Step 3:
+### Step 3 :
 
 Test the C Program for the desired output. 
 
-# PROGRAM:
+## PROGRAM :
 
-Developed by : Iyalarasu C
+### DEVELOPED BY : IYALARASU C
+### REG NO : 212223040069
 
-Register Number : 212223040069
-
-## C Program to print process ID and parent Process ID using Linux API system calls
-~~~
+## C Program to print process ID and parent Process ID using Linux API system calls :
+```
 #include <stdio.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -47,50 +48,94 @@ int main(void)
 	printf("The process id: %d\n",process_id);
 	printf("The process id of parent function: %d\n",p_process_id);
 	return 0; }
-~~~
+```
 
-## OUTPUT
-![322059149-fc4a585f-bf4c-46e2-8b28-bf0834b838b5](https://github.com/04Varsha/Linux-Process-API-fork-wait-exec/assets/149035374/277a5ef9-b0c2-4e5b-ad59-4a415db2c31c)
+## OUTPUT :
 
-## C Program to create new process using Linux API system calls fork() and exit()
-~~~
-#include <stdio.h>
-#include<stdlib.h>
-int main()
-{ int pid; 
-pid=fork(); 
-if(pid == 0) 
-{ printf("Iam child my pid is %d\n",getpid()); 
-printf("My parent pid is:%d\n",getppid()); 
-exit(0); } 
-else{ 
-printf("I am parent, my pid is %d\n",getpid()); 
-sleep(100); 
-exit(0);} 
-}
-~~~
+![image](https://github.com/JoyceBeulah/Linux-Process-API-fork-wait-exec/assets/118343698/c185b57b-3f9d-46bb-8c35-d1d38d480959)
 
-## OUTPUT
 
-![322059342-77e05b6f-d0c2-43ee-be5c-16bd0e20cd63](https://github.com/04Varsha/Linux-Process-API-fork-wait-exec/assets/149035374/88cf0f5e-c8fc-4341-b71a-c87c6979fdf1)
+## C Program to create new process using Linux API system calls fork() and exit() :
 
-## C Program to execute Linux system commands using Linux API system calls exec() family
-~~~
-#include <unistd.h>
+```
 #include <stdio.h>
 #include <stdlib.h>
-int main()
-{
-	printf("Running ps with execlp\n");
-	execlp("ps", "ps", "ax", NULL);
-	printf("Done.\n");
-	exit(0);
+#include <unistd.h>
+int main() {
+    int pid;
+    pid = fork();
+    if (pid == -1) {
+        perror("fork");
+        exit(EXIT_FAILURE);
+    }
+    else if (pid == 0) {
+        printf("I am child, my pid is %d\n", getpid());
+        printf("My parent pid is: %d\n", getppid());
+        exit(EXIT_SUCCESS);
+    }
+    else {
+        printf("I am parent, my pid is %d\n", getpid());
+        sleep(100);
+        exit(EXIT_SUCCESS);
+    }
+    return 0;
 }
-~~~
+```
 
-## OUTPUT
+## OUTPUT :
 
-![322059755-ef1d3f60-fadd-482f-86ea-bbf59756cf8b](https://github.com/04Varsha/Linux-Process-API-fork-wait-exec/assets/149035374/1842c773-69d6-4a4d-9e90-fd5f92813952)
+![image](https://github.com/JoyceBeulah/Linux-Process-API-fork-wait-exec/assets/118343698/f3fde68b-c98d-4172-a7db-0773758b3ad4)
 
-# RESULT:
-The programs are executed successfully.
+
+## C Program to execute Linux system commands using Linux API system calls exec() family :
+```
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
+int main() {
+    pid_t pid = fork();
+    if (pid < 0) {
+        perror("Fork failed");
+        exit(EXIT_FAILURE);
+    } else if (pid == 0) {
+        printf("This is the child process. Executing 'ls' command.\n");
+        execl("/bin/ls", "ls", "-l", NULL); // Lists files in long format
+        perror("execl failed");
+        exit(EXIT_FAILURE);
+    } else {
+        int status;
+        waitpid(pid, &status, 0); // Wait for the child to finish
+        if (WIFEXITED(status)) {
+            printf("Child process exited with status %d.\n", WEXITSTATUS(status));
+        } else {
+            printf("Child process did not exit normally.\n");
+        }
+        printf("Parent process is done.\n");
+    }
+    return 0;
+}
+```
+
+
+## OUTPUT :
+
+![image](https://github.com/JoyceBeulah/Linux-Process-API-fork-wait-exec/assets/118343698/42dda2d9-9f8a-47d2-b9c5-13dd09b97dd3)
+
+
+# RESULT :
+
+Thus the programs are executed successfully.
+
+
+
+
+
+
+
+
+
+
+
+
